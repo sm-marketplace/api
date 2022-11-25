@@ -2,7 +2,6 @@ import { PINATA_CREDS } from './config.js';
 import pinataSDK from '@pinata/sdk'
 import { Readable } from 'stream';
 
-
 const pinata = new pinataSDK(PINATA_CREDS);
 
 
@@ -28,6 +27,19 @@ export async function pinataUpload(file, name) {
   
   } catch (err) {
     console.log(err);
-    return undefined
+    return err
+  }
+}
+
+
+export async function testPinataAuth() {
+
+  try {
+    return pinata.testAuthentication();
+
+  } catch (err) {
+
+    console.log(err);
+    return err
   }
 }

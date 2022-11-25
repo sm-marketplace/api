@@ -59,6 +59,13 @@ app.post('/upload-file', async (req, res) => {
   }
 });
 
+app.get('/health/pinata', async (req, res) => {
+  res.json({
+    env: process.env.STAGE,
+    auth: await testPinataAuth(),
+  })
+})
+
 app.get('/info', (req, res) => {
   res.json({
     env: process.env.STAGE,

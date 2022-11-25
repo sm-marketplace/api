@@ -33,6 +33,16 @@ jobs:
         key : ${{ secrets.SSH_PRIVATE_KEY }}
         host: ${{ secrets.REMOTE_HOST_PROD }}
         username: ${{ secrets.REMOTE_USER }}
-        script: sudo docker pull rogrp6/smmp-api:latest ; sudo docker stop smmp-api ; sudo docker rm smmp-api ; sudo docker run --name smmp-api -d -p 80:3000 -e PORT=3000 -e HOST=0.0.0.0 -e STAGE=prod -e PINATA_API_KEY=${{ secrets.PROD_PINATA_API_KEY }} -e PINATA_SECRET_API_KEY=${{ secrets.PROD_PINATA_SECRET_API_KEY }} rogrp6/smmp-api:latest
+        script: |
+          sudo docker pull rogrp6/smmp-api:latest ; \
+          sudo docker stop smmp-api ; \
+          sudo docker rm smmp-api ; \
+          sudo docker run --name smmp-api -d -p 80:3000 \
+          -e PORT=3000 \
+          -e HOST=0.0.0.0 \
+          -e STAGE=prod \
+          -e PINATA_API_KEY=${{ secrets.PROD_PINATA_API_KEY }} \
+          -e PINATA_SECRET_API_KEY=${{ secrets.PROD_PINATA_SECRET_API_KEY }} \
+          rogrp6/smmp-api:latest
 
 

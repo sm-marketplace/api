@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import _ from 'lodash';
 import { HOST, PORT } from './config.js';
-import { pinataUpload } from './pinata.js';
+import { pinataUpload, testPinataAuth } from './pinata.js';
 
 const app = express()
 
@@ -60,10 +60,20 @@ app.post('/upload-file', async (req, res) => {
 });
 
 app.get('/health/pinata', async (req, res) => {
+  
+  let pinataRes = undefined;
+  try {
+    pinataRes = await testPinataAuth();
+  } catch (err) {
+    pinataRes = err;
+  }
+
   res.json({
     env: process.env.STAGE,
-    auth: await testPinataAuth(),
+    auth: pinataRes
   })
+
+
 })
 
 app.get('/info', (req, res) => {

@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: SSH
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         key : ${{ secrets.SSH_PRIVATE_KEY }}
-        host: ${{ secrets.REMOTE_HOST }}
+        host: ${{ secrets.REMOTE_HOST_PROD }}
         username: ${{ secrets.REMOTE_USER }}
         script: whoami
 

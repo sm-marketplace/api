@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Deploy PROD
 
 on:
   push:
@@ -26,3 +26,13 @@ jobs:
         
     - name: Push the Docker image
       run: docker push rogrp6/smmp-api:latest
+      
+    - name: Server pull and run Docker image 
+      uses: appleboy/ssh-action@master
+      with:
+        key : ${{ secrets.SSH_PRIVATE_KEY }}
+        host: ${{ secrets.REMOTE_HOST_PROD }}
+        username: ${{ secrets.REMOTE_USER }}
+        script: sudo docker pull rogrp6/smmp-api:latest && sudo docker stop smmp-api || sudo docker run --name smmp-api -d -p 80:3000 -e PORT=3000 -e HOST=0.0.0.0 rogrp6/smmp-api:latest
+
+

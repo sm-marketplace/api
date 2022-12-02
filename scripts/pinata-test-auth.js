@@ -1,4 +1,6 @@
-require('dotenv').config()
+import dotenv from 'dotenv';
+dotenv.config();
+import pinataSDK from '@pinata/sdk';
 
 const PINATA_CREDS = {
   pinataApiKey: process.env.PINATA_API_KEY, 
@@ -6,7 +8,6 @@ const PINATA_CREDS = {
 }
 
 // Use the api keys by specifying your api key and api secret
-const pinataSDK = require('@pinata/sdk');
 const pinata = new pinataSDK(PINATA_CREDS);
 
 pinata.testAuthentication().then((result) => {

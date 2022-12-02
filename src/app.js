@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import _ from 'lodash';
 import { HOST, PORT } from './config.js';
-import { pinataUpload, testPinataAuth } from './pinata.js';
+import { getItem, getItems, pinataUpload, testPinataAuth } from './pinata.js';
 
 const app = express()
 
@@ -24,6 +24,7 @@ app.use(morgan('dev'));
 
 app.post('/upload-file', async (req, res) => {
   try {
+  
     if (!req.files) {
       res.send({
         status: false,
@@ -32,15 +33,14 @@ app.post('/upload-file', async (req, res) => {
       return;
     }
 
-    //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-    let file = req.files.file;
+    const file = req.files.file;
+    const metadata = req.body['metadata'];
 
     if (process.env.STAGE == 'LOCAL') {
-      //Use the mv() method to place the file in the upload directory (i.e. "uploads")
       file.mv('./uploads/' + file.name);
     }
 
-    const pinataRes = await pinataUpload(file, file.name)
+    const pinataRes = await pinataUpload(file, file.name, metadata)
 
     //send response
     res.send({
@@ -51,7 +51,8 @@ app.post('/upload-file', async (req, res) => {
         mimetype: file.mimetype,
         size: file.size
       },
-      pinata: pinataRes
+      pinata: pinataRes,
+      metadata
     });
   } catch (err) {
     console.error(err)
@@ -59,8 +60,43 @@ app.post('/upload-file', async (req, res) => {
   }
 });
 
+app.get('/item/:hash', async (req, res) => {
+  try {
+
+    const hash = req.params['hash'];
+    const item = await getItem(hash);
+
+    res.send({
+      status: true,
+      itemFound: item != undefined,
+      item
+    });
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send(err);
+  }
+})
+
+app.post('/search', async (req, res) => {
+  try {
+
+    const filters = req.body['filters'];
+    const items = await getItems(filters);
+
+    res.send({
+      status: true,
+      itemsFound: items.length,
+      items,
+    });
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send(err);
+  }
+})
+
 app.get('/health/pinata', async (req, res) => {
-  
   let pinataRes = undefined;
   try {
     pinataRes = await testPinataAuth();

@@ -27,7 +27,7 @@ export async function pinataUpload(file, name, metadata) {
     return await pinata.pinFileToIPFS(stream, options)
   
   } catch (err) {
-    console.err(err);
+    console.error(err);
     return err
   }
 }

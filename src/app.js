@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import _ from 'lodash';
 import { HOST, PORT } from './config.js';
 import { getItem, getItems, pinataUpload, testPinataAuth } from './pinata.js';
+import e from 'express';
 
 const app = express()
 
@@ -34,11 +35,12 @@ app.post('/upload-file', async (req, res) => {
     }
 
     const file = req.files.file;
-    const metadata = req.body['metadata'];
+    const metadataStr = req.body['metadata'];
+    const metadata = JSON.parse(metadataStr);
 
     if (process.env.STAGE == 'LOCAL') {
       file.mv('./uploads/' + file.name);
-    }
+    };
 
     const pinataRes = await pinataUpload(file, file.name, metadata)
 
@@ -56,6 +58,14 @@ app.post('/upload-file', async (req, res) => {
     });
   } catch (err) {
     console.error(err)
+
+    if (err instanceof SyntaxError) {
+      res.status(500).send({
+        success: false,
+        message: "metadata is not a valid json" 
+      });
+    }
+
     res.status(500).send(err);
   }
 });

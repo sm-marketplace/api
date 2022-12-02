@@ -62,7 +62,7 @@ export async function getItem(hash) {
     return rows[0];
 
   } catch (err) {
-    console.err(err);
+    console.error(err);
     return err
   }
 }
@@ -91,7 +91,7 @@ export async function getItems(filters) {
     return query.rows;
 
   } catch (err) {
-    console.err(err);
+    console.error(err);
     return err
   }
 }

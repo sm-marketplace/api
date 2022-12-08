@@ -25,12 +25,17 @@ docker run --name smmp-api -d -p 3000:3000 \
 
 ## Run
 
+1 - Create `.env` file and copy content of `.env.sample`, then fill the variables
+
+2 - Execute 
 ```
 npm run start
-```
 
-o 
-```
-(requiere nodemon)
+// or use nodemon: 
 npm run watch
 ```
+
+## Docs
+
+1. Save postman file: `docs/smmp-api.postman_collection.json`
+2. Generate Open API file: `npm run mkoapi`

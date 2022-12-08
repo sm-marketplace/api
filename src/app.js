@@ -66,7 +66,10 @@ app.post('/upload-file', async (req, res) => {
       });
     }
 
-    res.status(500).send(err);
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
   }
 });
 
@@ -84,7 +87,10 @@ app.get('/item/:hash', async (req, res) => {
 
   } catch (err) {
     console.error(err)
-    res.status(500).send(err);
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
   }
 })
 
@@ -102,7 +108,10 @@ app.post('/search', async (req, res) => {
 
   } catch (err) {
     console.error(err)
-    res.status(500).send(err);
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
   }
 })
 

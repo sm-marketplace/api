@@ -23,7 +23,7 @@ docker run --name smmp-api -d -p 3000:3000 \
   rogrp6/smmp-api:dev
 ```
 
-## Run
+## Development
 
 1 - Create `.env` file and copy content of `.env.sample`, then fill the variables
 

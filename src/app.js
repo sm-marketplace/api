@@ -47,9 +47,9 @@ app.post('/upload-file', async (req, res) => {
     const metadataStr = req.body['metadata'];
     const metadata = JSON.parse(metadataStr);
 
-    if (process.env.STAGE == 'LOCAL') {
-      file.mv('./uploads/' + file.name);
-    };
+    // if (process.env.STAGE == 'LOCAL') {
+    //   file.mv('./uploads/' + file.name);
+    // };
 
     const pinataRes = await pinataUpload(file, file.name, metadata)
 

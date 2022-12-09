@@ -1,0 +1,349 @@
+{
+	"info": {
+		"_postman_id": "2f40ad05-46a0-404b-8844-5b8f9a8ed0de",
+		"name": "SM Marketplace API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18727656"
+	},
+	"item": [
+		{
+			"name": "Upload file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "archivo a subir",
+							"type": "file",
+							"src": "/C:/Users/rogrp/Downloads/test-images/rintaro-1.jpg"
+						},
+						{
+							"key": "metadata",
+							"value": "{\"subject\":\"test\"}",
+							"description": "los valores deben ser numeros o string",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/upload-file",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"upload-file"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Upload file",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "archivo a subir",
+									"type": "file",
+									"src": "/C:/Users/rogrp/Downloads/test-images/rintaro-1.jpg"
+								},
+								{
+									"key": "metadata",
+									"value": "{\"subject\":\"test\"}",
+									"description": "los valores deben ser numeros o string",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/upload-file",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"upload-file"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "271"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"10f-8nGP4qbgEQNQxAvd14ZjKZGqlOI\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 02 Dec 2022 07:24:26 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"message\": \"File is uploaded\",\n    \"data\": {\n        \"name\": \"rintaro-1.jpg\",\n        \"mimetype\": \"image/jpeg\",\n        \"size\": 194547\n    },\n    \"pinata\": {\n        \"IpfsHash\": \"QmYSunLGem8Jqpr4ckDZjQhEywUya3T7Lxhpk1XbNMEg3j\",\n        \"PinSize\": 194561,\n        \"Timestamp\": \"2022-12-02T07:24:26.275Z\"\n    },\n    \"metadata\": {\n        \"subject\": \"test\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Contract ABI",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get Item",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": [
+				{
+					"name": "Not found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/item/:hash",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"item",
+								":hash"
+							],
+							"variable": [
+								{
+									"key": "hash",
+									"value": "asdsada"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "33"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"21-0GYo6HjIpwRL5iw4+HjMvV/wfhc\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 02 Dec 2022 06:38:53 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"itemFound\": false\n}"
+				},
+				{
+					"name": "Item found",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/item/:hash",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"item",
+								":hash"
+							],
+							"variable": [
+								{
+									"key": "hash",
+									"value": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "510"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1fe-lOMBZ0Xel/VsusvhY5a1HfGZ/pk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 02 Dec 2022 06:39:22 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"itemFound\": true,\n    \"item\": {\n        \"id\": \"523346c4-2070-4234-a5af-6aaacf065d5f\",\n        \"ipfs_pin_hash\": \"QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy\",\n        \"size\": 155841,\n        \"user_id\": \"c62b3ae7-7f61-4633-a8f8-59fc2224b358\",\n        \"date_pinned\": \"2022-11-25T08:40:13.972Z\",\n        \"date_unpinned\": null,\n        \"metadata\": {\n            \"name\": \"mayuri.jpg\",\n            \"keyvalues\": {\n                \"uploadedBy\": \"SMMP API\"\n            }\n        },\n        \"regions\": [\n            {\n                \"regionId\": \"FRA1\",\n                \"currentReplicationCount\": 1,\n                \"desiredReplicationCount\": 1\n            },\n            {\n                \"regionId\": \"NYC1\",\n                \"currentReplicationCount\": 1,\n                \"desiredReplicationCount\": 1\n            }\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Pinata Search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"filters\": {\r\n        \"hashContains\": \"QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/search",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Search",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filters\": {\r\n        \"hashContains\": \"QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/search",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"search"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "511"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1ff-6bT3FCuSjbE3GCXWGwiaafycUmk\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 02 Dec 2022 06:44:42 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": true,\n    \"itemsFound\": 1,\n    \"items\": [\n        {\n            \"id\": \"523346c4-2070-4234-a5af-6aaacf065d5f\",\n            \"ipfs_pin_hash\": \"QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy\",\n            \"size\": 155841,\n            \"user_id\": \"c62b3ae7-7f61-4633-a8f8-59fc2224b358\",\n            \"date_pinned\": \"2022-11-25T08:40:13.972Z\",\n            \"date_unpinned\": null,\n            \"metadata\": {\n                \"name\": \"mayuri.jpg\",\n                \"keyvalues\": {\n                    \"uploadedBy\": \"SMMP API\"\n                }\n            },\n            \"regions\": [\n                {\n                    \"regionId\": \"FRA1\",\n                    \"currentReplicationCount\": 1,\n                    \"desiredReplicationCount\": 1\n                },\n                {\n                    \"regionId\": \"NYC1\",\n                    \"currentReplicationCount\": 1,\n                    \"desiredReplicationCount\": 1\n                }\n            ]\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}

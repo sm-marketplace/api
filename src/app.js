@@ -1,15 +1,25 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import express from 'express'
-import fileUpload from 'express-fileupload';
-import cors from 'cors'
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
-import _ from 'lodash';
 import { HOST, PORT } from './config.js';
-import { pinataUpload, testPinataAuth } from './pinata.js';
+import { getItem, getItems, pinataUpload, testPinataAuth } from './pinata.js';
+dotenv.config()
 
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = new RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5
+});
+
+// apply rate limiter to all requests
 const app = express()
+
+// CodeQL: js/missing-rate-limiting
+app.use(limiter);
 
 // enable files upload
 app.use(fileUpload({
@@ -24,6 +34,7 @@ app.use(morgan('dev'));
 
 app.post('/upload-file', async (req, res) => {
   try {
+  
     if (!req.files) {
       res.send({
         status: false,
@@ -32,15 +43,15 @@ app.post('/upload-file', async (req, res) => {
       return;
     }
 
-    //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-    let file = req.files.file;
+    const file = req.files.file;
+    const metadataStr = req.body['metadata'];
+    const metadata = JSON.parse(metadataStr);
 
-    if (process.env.STAGE == 'LOCAL') {
-      //Use the mv() method to place the file in the upload directory (i.e. "uploads")
-      file.mv('./uploads/' + file.name);
-    }
+    // if (process.env.STAGE == 'LOCAL') {
+    //   file.mv('./uploads/' + file.name);
+    // };
 
-    const pinataRes = await pinataUpload(file, file.name)
+    const pinataRes = await pinataUpload(file, file.name, metadata)
 
     //send response
     res.send({
@@ -51,16 +62,69 @@ app.post('/upload-file', async (req, res) => {
         mimetype: file.mimetype,
         size: file.size
       },
-      pinata: pinataRes
+      pinata: pinataRes,
+      metadata
     });
   } catch (err) {
     console.error(err)
-    res.status(500).send(err);
+
+    if (err instanceof SyntaxError) {
+      res.status(500).send({
+        success: false,
+        message: "metadata is not a valid json" 
+      });
+    }
+
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
   }
 });
 
+app.get('/item/:hash', async (req, res) => {
+  try {
+
+    const hash = req.params['hash'];
+    const item = await getItem(hash);
+
+    res.send({
+      status: true,
+      itemFound: item != undefined,
+      item
+    });
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
+  }
+})
+
+app.post('/search', async (req, res) => {
+  try {
+
+    const filters = req.body['filters'];
+    const items = await getItems(filters);
+
+    res.send({
+      status: true,
+      itemsFound: items.length,
+      items,
+    });
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).send({
+      success: false,
+      message: "An error has occurred" 
+    });
+  }
+})
+
 app.get('/health/pinata', async (req, res) => {
-  
   let pinataRes = undefined;
   try {
     pinataRes = await testPinataAuth();

@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "mkoapi": "p2o \"docs/smmp-api.postman_collection.json\" -f ./docs/smmp-api.openapi.yml"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,9 @@
     "express-fileupload": "^1.4.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "postman-to-openapi": "^2.9.0"
   }
 }

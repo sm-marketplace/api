@@ -6,21 +6,18 @@
 - Project in [Pinata](https://www.pinata.cloud/)
 
 ## Docker Image
-Necesita obtener PINATA_API_KEY y PINATA_SECRET_API_KEY creando un proyecto en 
-[Pinata](https://www.pinata.cloud/) y reemplazar los valores en `<PINATA_API_KEY>` y
-`<PINATA_SECRET_API_KEY>`
+Needs generate **`PINATA_API_KEY`** and **`PINATA_SECRET_API_KEY`** creating a 
+[Pinata](https://www.pinata.cloud/) project and then should set as enviroment variables
 
-```sh
-docker pull rogrp6/smmp-api:dev
-docker stop smmp-api # limpieza, ignore si da error
-docker rm smmp-api # limpieza, ignore si da error
-docker run --name smmp-api -d -p 3000:3000 \
-  -e PORT=3000 \
-  -e HOST=0.0.0.0 \
-  -e STAGE=dev \
-  -e PINATA_API_KEY=<PINATA_API_KEY> \
-  -e PINATA_SECRET_API_KEY=<PINATA_SECRET_API_KEY> \
-  rogrp6/smmp-api:dev
+```bash
+docker run --pull allways --rm -d \
+--name smmp-api -p 3000:3000 \
+-e PORT=3000 \
+-e HOST=0.0.0.0 \
+-e STAGE=dev \
+-e PINATA_API_KEY=$PINATA_API_KEY \
+-e PINATA_SECRET_API_KEY=$PINATA_SECRET_API_KEY \
+rogrp6/smmp-api:dev
 ```
 
 ## Development

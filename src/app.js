@@ -1,16 +1,25 @@
-import dotenv from 'dotenv'
-dotenv.config()
-import express from 'express'
-import fileUpload from 'express-fileupload';
-import cors from 'cors'
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
-import _ from 'lodash';
 import { HOST, PORT } from './config.js';
 import { getItem, getItems, pinataUpload, testPinataAuth } from './pinata.js';
-import e from 'express';
+dotenv.config()
 
+// set up rate limiter: maximum of five requests per minute
+var RateLimit = require('express-rate-limit');
+var limiter = new RateLimit({
+  windowMs: 1*60*1000, // 1 minute
+  max: 5
+});
+
+// apply rate limiter to all requests
 const app = express()
+
+// CodeQL: js/missing-rate-limiting
+app.use(limiter);
 
 // enable files upload
 app.use(fileUpload({

@@ -4,21 +4,21 @@ import dotenv from 'dotenv';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
 import { HOST, PORT } from './config.js';
 import { getItem, getItems, pinataUpload, testPinataAuth } from './pinata.js';
 dotenv.config()
 
 // set up rate limiter: maximum of five requests per minute
-var RateLimit = require('express-rate-limit');
-var limiter = new RateLimit({
+var limiter = rateLimit({
   windowMs: 1*60*1000, // 1 minute
   max: 5
 });
 
-// apply rate limiter to all requests
 const app = express()
 
 // CodeQL: js/missing-rate-limiting
+// apply rate limiter to all requests
 app.use(limiter);
 
 // enable files upload

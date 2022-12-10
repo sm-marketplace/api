@@ -17,10 +17,6 @@ var limiter = rateLimit({
 
 const app = express()
 
-// CodeQL: js/missing-rate-limiting
-// apply rate limiter to all requests
-app.use(limiter);
-
 // enable files upload
 app.use(fileUpload({
   createParentPath: true
@@ -32,6 +28,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
+// CodeQL: js/missing-rate-limiting
+app.use('/upload-file', limiter)
 app.post('/upload-file', async (req, res) => {
   try {
   

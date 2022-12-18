@@ -12,11 +12,12 @@ env:
   SSH_PRIVKEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.PROD_PINATA_API_KEY }}
   PINATA_SECRET_API_KEY: ${{ secrets.PROD_PINATA_SECRET_API_KEY }}
+
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 jobs:
 

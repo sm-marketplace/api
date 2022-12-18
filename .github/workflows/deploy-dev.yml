@@ -20,12 +20,10 @@ on:
     branches: [ "dev" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
+    
     - uses: actions/checkout@v3
     
     - name: Build the Docker image
@@ -54,5 +52,4 @@ jobs:
           -e STAGE=${{ env.STAGE }} \
           -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
           -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
-          $DOCKER_IMAGE:${{ env.DOCKER_IMAGE_TAG }}
-
+          ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}

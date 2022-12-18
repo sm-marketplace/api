@@ -12,12 +12,11 @@ env:
   SSH_PRIVKEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.PROD_PINATA_API_KEY }}
   PINATA_SECRET_API_KEY: ${{ secrets.PROD_PINATA_SECRET_API_KEY }}
-
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 
 jobs:
 
@@ -34,8 +33,8 @@ jobs:
     - name: Docker Login
       uses: docker/login-action@v2.1.0
       with:
-        username: $DOCKER_USERNAME
-        password: $DOCKER_PASSWORD
+        username: ${{ env.DOCKER_USERNAME }}
+        password: ${{ env.DOCKER_PASSWORD }}
         
     - name: Push the Docker image
       run: docker push $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
@@ -43,17 +42,16 @@ jobs:
     - name: Server pull and run Docker image 
       uses: appleboy/ssh-action@master
       with:
-        key : $SSH_PRIVATE_KEY
-        host: $SERVER_HOST
-        username: $SERVER_USER
+        key : ${{ env.SSH_PRIVATE_KEY }}
+        host: ${{ env.SERVER_HOST }}
+        username: ${{ env.SERVER_USER }}
         script: |
-          sudo docker pull $DOCKER_IMAGE:$DOCKER_IMAGE_TAG ; \
-          sudo docker stop $CONTAINER_NAME ; \
-          sudo docker rm $CONTAINER_NAME ; \
-          sudo docker run --name $CONTAINER_NAME -d -p 80:3000 \
+          sudo docker stop ${{ env.CONTAINER_NAME }} ; \
+          sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
           -e PORT=3000 \
           -e HOST=0.0.0.0 \
-          -e STAGE=$STAGE \
-          -e PINATA_API_KEY=$PINATA_API_KEY \
-          -e PINATA_SECRET_API_KEY=$PINATA_SECRET_API_KEY \
-          $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
+          -e STAGE=${{ env.STAGE }} \
+          -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
+          -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
+          ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
+

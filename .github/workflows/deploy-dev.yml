@@ -34,8 +34,8 @@ jobs:
     - name: Docker Login
       uses: docker/login-action@v2.1.0
       with:
-        username: $DOCKER_USERNAME
-        password: $DOCKER_PASSWORD
+        username: ${{ $DOCKER_PASSWORD }}
+        password: ${{ $DOCKER_PASSWORD }}
         
     - name: Push the Docker image
       run: docker push $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
@@ -43,9 +43,9 @@ jobs:
     - name: Server pull and run Docker image 
       uses: appleboy/ssh-action@master
       with:
-        key : $SSH_PRIVATE_KEY
-        host: $SERVER_HOST
-        username: $SERVER_USER
+        key : ${{ $SSH_PRIVATE_KEY }}
+        host: ${{ $SERVER_HOST }}
+        username: ${{ $SERVER_USER }}
         script: |
           sudo docker pull $DOCKER_IMAGE:$DOCKER_IMAGE_TAG ; \
           sudo docker stop $CONTAINER_NAME ; \

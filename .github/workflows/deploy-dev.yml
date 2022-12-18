@@ -9,7 +9,7 @@ env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
   SERVER_HOST: ${{ secrets.DEV_SSH_HOST }}
   SERVER_USER: ${{ secrets.DEV_SSH_USER }}
-  SSH_PRIVKEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.DEV_PINATA_API_KEY }}
   PINATA_SECRET_API_KEY: ${{ secrets.DEV_PINATA_SECRET_API_KEY }}
 

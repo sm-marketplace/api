@@ -47,10 +47,8 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          sudo docker pull $DOCKER_IMAGE:$DOCKER_IMAGE_TAG ; \
           sudo docker stop $CONTAINER_NAME ; \
-          sudo docker rm $CONTAINER_NAME ; \
-          sudo docker run --name $CONTAINER_NAME -d -p 80:3000 \
+          sudo docker run --pull always --rm --name $CONTAINER_NAME -d -p 80:3000 \
           -e PORT=3000 \
           -e HOST=0.0.0.0 \
           -e STAGE=$STAGE \

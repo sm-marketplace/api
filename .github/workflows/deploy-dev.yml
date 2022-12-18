@@ -47,12 +47,12 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          sudo docker stop $CONTAINER_NAME ; \
-          sudo docker run --pull always --rm --name $CONTAINER_NAME -d -p 80:3000 \
+          sudo docker stop ${{ env.CONTAINER_NAME }} ; \
+          sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
           -e PORT=3000 \
           -e HOST=0.0.0.0 \
-          -e STAGE=$STAGE \
-          -e PINATA_API_KEY=$PINATA_API_KEY \
-          -e PINATA_SECRET_API_KEY=$PINATA_SECRET_API_KEY \
-          $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
+          -e STAGE=${{ env.STAGE }} \
+          -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
+          -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
+          $DOCKER_IMAGE:${{ env.DOCKER_IMAGE_TAG }}
 

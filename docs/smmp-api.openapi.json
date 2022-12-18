@@ -1,0 +1,419 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "SM Marketplace API",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "servers": [
+    {
+      "dev": "ec2-54-88-42-187.compute-1.amazonaws.com",
+      "prod": "ec2-44-212-148-121.compute-1.amazonaws.com"
+    }
+  ],
+  "paths": {
+    "/upload-file": {
+      "post": {
+        "summary": "Upload file",
+        "description": "Upload file",
+        "operationId": "uploadFile",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "description": "archivo a subir",
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "metadata": {
+                    "description": "los valores deben ser numeros o string",
+                    "type": "string",
+                    "example": "{\"subject\":\"test\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upload file",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "271"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fri, 02 Dec 2022 07:24:26 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"10f-8nGP4qbgEQNQxAvd14ZjKZGqlOI\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "mimetype": {
+                          "type": "string",
+                          "example": "image/jpeg"
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "rintaro-1.jpg"
+                        },
+                        "size": {
+                          "type": "number",
+                          "example": 194547
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "File is uploaded"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "subject": {
+                          "type": "string",
+                          "example": "test"
+                        }
+                      }
+                    },
+                    "pinata": {
+                      "type": "object",
+                      "properties": {
+                        "IpfsHash": {
+                          "type": "string",
+                          "example": "QmYSunLGem8Jqpr4ckDZjQhEywUya3T7Lxhpk1XbNMEg3j"
+                        },
+                        "PinSize": {
+                          "type": "number",
+                          "example": 194561
+                        },
+                        "Timestamp": {
+                          "type": "string",
+                          "example": "2022-12-02T07:24:26.275Z"
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "Upload file": {
+                    "value": {
+                      "data": {
+                        "mimetype": "image/jpeg",
+                        "name": "rintaro-1.jpg",
+                        "size": 194547
+                      },
+                      "message": "File is uploaded",
+                      "metadata": {
+                        "subject": "test"
+                      },
+                      "pinata": {
+                        "IpfsHash": "QmYSunLGem8Jqpr4ckDZjQhEywUya3T7Lxhpk1XbNMEg3j",
+                        "PinSize": 194561,
+                        "Timestamp": "2022-12-02T07:24:26.275Z"
+                      },
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "post": {
+        "summary": "Pinata Search",
+        "description": "Pinata Search",
+        "operationId": "pinataSearch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "filters": {
+                    "type": "object",
+                    "properties": {
+                      "hashContains": {
+                        "type": "string",
+                        "example": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "filters": {
+                  "hashContains": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "511"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fri, 02 Dec 2022 06:44:42 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1ff-6bT3FCuSjbE3GCXWGwiaafycUmk\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "date_pinned": {
+                            "type": "string",
+                            "example": "2022-11-25T08:40:13.972Z"
+                          },
+                          "date_unpinned": {
+                            "nullable": true,
+                            "example": null
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "523346c4-2070-4234-a5af-6aaacf065d5f"
+                          },
+                          "ipfs_pin_hash": {
+                            "type": "string",
+                            "example": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "properties": {
+                              "keyvalues": {
+                                "type": "object",
+                                "properties": {
+                                  "uploadedBy": {
+                                    "type": "string",
+                                    "example": "SMMP API"
+                                  }
+                                }
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "mayuri.jpg"
+                              }
+                            }
+                          },
+                          "regions": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "currentReplicationCount": {
+                                  "type": "number",
+                                  "example": 1
+                                },
+                                "desiredReplicationCount": {
+                                  "type": "number",
+                                  "example": 1
+                                },
+                                "regionId": {
+                                  "type": "string",
+                                  "example": "FRA1"
+                                }
+                              }
+                            },
+                            "example": [
+                              {
+                                "currentReplicationCount": 1,
+                                "desiredReplicationCount": 1,
+                                "regionId": "FRA1"
+                              },
+                              {
+                                "currentReplicationCount": 1,
+                                "desiredReplicationCount": 1,
+                                "regionId": "NYC1"
+                              }
+                            ]
+                          },
+                          "size": {
+                            "type": "number",
+                            "example": 155841
+                          },
+                          "user_id": {
+                            "type": "string",
+                            "example": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "date_pinned": "2022-11-25T08:40:13.972Z",
+                          "date_unpinned": null,
+                          "id": "523346c4-2070-4234-a5af-6aaacf065d5f",
+                          "ipfs_pin_hash": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy",
+                          "metadata": {
+                            "keyvalues": {
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "mayuri.jpg"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 155841,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        }
+                      ]
+                    },
+                    "itemsFound": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "Search": {
+                    "value": {
+                      "items": [
+                        {
+                          "date_pinned": "2022-11-25T08:40:13.972Z",
+                          "date_unpinned": null,
+                          "id": "523346c4-2070-4234-a5af-6aaacf065d5f",
+                          "ipfs_pin_hash": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy",
+                          "metadata": {
+                            "keyvalues": {
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "mayuri.jpg"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 155841,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        }
+                      ],
+                      "itemsFound": 1,
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

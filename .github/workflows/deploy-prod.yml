@@ -1,5 +1,18 @@
 name: Deploy PROD
 
+env: 
+  STAGE: prod
+  CONTAINER_NAME: smmp-api
+  DOCKER_IMAGE: rogrp6/smmp-api
+  DOCKER_IMAGE_TAG: latest
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  SERVER_HOST: ${{ secrets.PROD_SSH_HOST }}
+  SERVER_USER: ${{ secrets.PROD_SSH_USER }}
+  SSH_PRIVKEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  PINATA_API_KEY: ${{ secrets.PROD_PINATA_API_KEY }}
+  PINATA_SECRET_API_KEY: ${{ secrets.PROD_PINATA_SECRET_API_KEY }}
+
 on:
   push:
     branches: [ "main" ]
@@ -16,33 +29,31 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Build the Docker image
-      run: docker build . -t rogrp6/smmp-api:latest
+      run: docker build . -t $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
       
     - name: Docker Login
       uses: docker/login-action@v2.1.0
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
         
     - name: Push the Docker image
-      run: docker push rogrp6/smmp-api:latest
+      run: docker push $DOCKER_IMAGE:$DOCKER_IMAGE_TAG
       
     - name: Server pull and run Docker image 
       uses: appleboy/ssh-action@master
       with:
-        key : ${{ secrets.SSH_PRIVATE_KEY }}
-        host: ${{ secrets.REMOTE_HOST_PROD }}
-        username: ${{ secrets.REMOTE_USER }}
+        key : $SSH_PRIVATE_KEY
+        host: $SERVER_HOST
+        username: $SERVER_USER
         script: |
-          sudo docker pull rogrp6/smmp-api:latest ; \
-          sudo docker stop smmp-api ; \
-          sudo docker rm smmp-api ; \
-          sudo docker run --name smmp-api -d -p 80:3000 \
+          sudo docker pull $DOCKER_IMAGE:$DOCKER_IMAGE_TAG ; \
+          sudo docker stop $CONTAINER_NAME ; \
+          sudo docker rm $CONTAINER_NAME ; \
+          sudo docker run --name $CONTAINER_NAME -d -p 80:3000 \
           -e PORT=3000 \
           -e HOST=0.0.0.0 \
-          -e STAGE=prod \
-          -e PINATA_API_KEY=${{ secrets.PROD_PINATA_API_KEY }} \
-          -e PINATA_SECRET_API_KEY=${{ secrets.PROD_PINATA_SECRET_API_KEY }} \
-          rogrp6/smmp-api:latest
-
-
+          -e STAGE=$STAGE \
+          -e PINATA_API_KEY=$PINATA_API_KEY \
+          -e PINATA_SECRET_API_KEY=$PINATA_SECRET_API_KEY \
+          $DOCKER_IMAGE:$DOCKER_IMAGE_TAG

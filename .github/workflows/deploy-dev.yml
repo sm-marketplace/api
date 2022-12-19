@@ -44,12 +44,15 @@ jobs:
         key : ${{ env.SSH_PRIVATE_KEY }}
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
+        envs: PORT,HOST,STAGE,PINATA_API_KEY,PINATA_SECRET_API_KEY
         script: |
-          sudo docker stop ${{ env.CONTAINER_NAME }} ; \
-          sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
-          -e PORT=3000 \
-          -e HOST=0.0.0.0 \
-          -e STAGE=${{ env.STAGE }} \
-          -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
-          -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
-          ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
+          docker-compose up -d --build --remove-orphans
+        # script: |
+        #   sudo docker stop ${{ env.CONTAINER_NAME }} ; \
+        #   sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
+        #   -e PORT=3000 \
+        #   -e HOST=0.0.0.0 \
+        #   -e STAGE=${{ env.STAGE }} \
+        #   -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
+        #   -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
+        #   ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}

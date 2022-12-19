@@ -45,11 +45,31 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
+          sudo docker network create local_net ; \
+          sudo docker stop redis_db ; \
+          sudo docker run --network local_net -d -p 6379:6379 --rm --name redis_db redis:latest ; \
           sudo docker stop ${{ env.CONTAINER_NAME }} ; \
-          sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
+          sudo docker run --network local_net --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
           -e PORT=3000 \
           -e HOST=0.0.0.0 \
           -e STAGE=${{ env.STAGE }} \
           -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
           -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
+          -e REDIS_HOST=redis_db \
+          -e REDIS_PORT=6379 \
+          -e REDIS_TTL=240000000 \
           ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
+        # script: |
+        #   sudo docker stop redis_db ; \
+        #   sudo docker run -d -p 6379:6379 --rm --name redis_db redis:latest ; \
+        #   sudo docker stop ${{ env.CONTAINER_NAME }} ; \
+        #   sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
+        #   -e PORT=3000 \
+        #   -e HOST=0.0.0.0 \
+        #   -e STAGE=${{ env.STAGE }} \
+        #   -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
+        #   -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
+        #   -e REDIS_HOST=0.0.0.0 \
+        #   -e REDIS_PORT=6379 \
+        #   -e REDIS_TTL=240000000 \
+        #   ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}

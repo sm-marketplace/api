@@ -1,4 +1,4 @@
-import { PINATA_CREDS } from './config.js';
+import { PINATA_CREDS } from '../config.js';
 import pinataSDK from '@pinata/sdk'
 import { Readable } from 'stream';
 
@@ -48,7 +48,9 @@ export async function testPinataAuth() {
 
 export async function getItem(hash) {
 
+
   try {
+    console.log("Pinata pinList");
     const query = await pinata.pinList({
       hashContains: hash
     });

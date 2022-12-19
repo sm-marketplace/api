@@ -8,6 +8,9 @@ dotenv.config();
   'HOST',
   'PORT',
   'STAGE',
+  'REDIS_HOST',
+  'REDIS_PORT',
+  'REDIS_TTL',
 ]).forEach(v => {
   if (v in process.env) return
   console.warn(`[WARNING](env) variable "${v}" is not set`)
@@ -20,3 +23,7 @@ export const PINATA_CREDS = {
 
 export const HOST = process.env.HOST;
 export const PORT = process.env.PORT;
+export const STAGE = process.env.STAGE;
+export const REDIS_HOST = process.env.REDIS_HOST;
+export const REDIS_PORT = process.env.REDIS_PORT;
+export const REDIS_TTL = process.env.REDIS_TTL;

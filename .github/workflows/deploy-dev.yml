@@ -55,7 +55,7 @@ jobs:
           -e STAGE=${{ env.STAGE }} \
           -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
           -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
-          -e REDIS_HOST=0.0.0.0 \
+          -e REDIS_HOST=redis_db \
           -e REDIS_PORT=6379 \
           -e REDIS_TTL=240000000 \
           ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}

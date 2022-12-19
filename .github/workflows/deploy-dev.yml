@@ -45,7 +45,8 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          sudo docker run -d -p 6379:6379 redis:latest ; \
+          sudo docker stop redis_db ; \
+          sudo docker run -d -p 6379:6379 --name redis_db redis:latest ; \
           sudo docker stop ${{ env.CONTAINER_NAME }} ; \
           sudo docker run --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
           -e PORT=3000 \

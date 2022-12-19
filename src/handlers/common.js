@@ -1,3 +1,5 @@
+import { STAGE } from "../config.js"
+
 export const handleHello = (req, res) => {
   res.json({
     msg: "Hello friend",
@@ -14,7 +16,7 @@ export const handleMe = (req, res) => {
 
 export const handleInfo = (req, res) => {
   res.json({
-    env: process.env.STAGE,
+    env: STAGE,
     version: "v1.0.0"
   })
 }

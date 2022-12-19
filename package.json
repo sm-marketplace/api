@@ -34,6 +34,7 @@
     "redis": "^4.5.1"
   },
   "devDependencies": {
+    "eslint": "^8.30.0",
     "nodemon": "^2.0.20",
     "postman-to-openapi": "^2.9.0"
   }

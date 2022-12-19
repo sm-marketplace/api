@@ -1,3 +1,7 @@
+import { REDIS_TTL } from "../config.js";
+import { redisClient } from "../redis.js";
+import { getItem, getItems, pinataUpload, testPinataAuth } from "../services/pinata.js";
+
 export const handleHealthPinata = async (req, res) => {
   let pinataRes = undefined;
   try {
@@ -40,8 +44,7 @@ export const handleGetItemPinata = async (req, res) => {
     const item = await getItem(hash);
 
     await redisClient.set(hash, JSON.stringify(item), {
-      EX: 180,
-      NX: true,
+      EX: REDIS_TTL,
     });
 
     res.send({

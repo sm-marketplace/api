@@ -23,6 +23,7 @@ export const PINATA_CREDS = {
 
 export const HOST = process.env.HOST;
 export const PORT = process.env.PORT;
+export const STAGE = process.env.STAGE;
 export const REDIS_HOST = process.env.REDIS_HOST;
 export const REDIS_PORT = process.env.REDIS_PORT;
 export const REDIS_TTL = process.env.REDIS_TTL;

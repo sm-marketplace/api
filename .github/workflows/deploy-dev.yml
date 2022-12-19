@@ -46,8 +46,8 @@ jobs:
         username: ${{ env.SERVER_USER }}
         envs: PORT,HOST,STAGE,PINATA_API_KEY,PINATA_SECRET_API_KEY
         script: |
-          git clone https://github.com/sm-marketplace/api.git app
-          cd app
+          git clone https://github.com/sm-marketplace/api.git app && \
+          cd app && \
           docker-compose up -d --build --remove-orphans
         # script: |
         #   sudo docker stop ${{ env.CONTAINER_NAME }} ; \

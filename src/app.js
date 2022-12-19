@@ -18,6 +18,7 @@ app.use(fileUpload({ createParentPath: true })); // Enable files upload
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/upload-file', rateLimiter) // CodeQL: js/missing-rate-limiting
+app.use('/search', rateLimiter) // CodeQL: js/missing-rate-limiting
 
 // Routes
 app.post('/upload-file', handlePostItemPinata);

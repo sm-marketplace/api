@@ -32,6 +32,13 @@ npm run start
 npm run watch
 ```
 
+## Scripts
+
+**Clear Redis**
+```
+node scripts/redis-clear.js
+```
+
 ## Docs
 
 1. Save postman file: `docs/smmp-api.postman_collection.json`

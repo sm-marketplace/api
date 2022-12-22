@@ -42,4 +42,7 @@ node scripts/redis-clear.js
 ## Docs
 
 1. Save postman file: `docs/smmp-api.postman_collection.json`
-2. Generate Open API file: `npm run mkoapi`
+2. Generate Open API file, example using `postman2openapi` on Windows: 
+``` 
+"./bin/postman2openapi/postman2openapi.exe" -f json docs/smmp-api.postman_collection.json > docs/smmp-api.openapi.json 
+```

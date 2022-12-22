@@ -7,15 +7,19 @@
   },
   "servers": [
     {
-      "dev": "ec2-54-88-42-187.compute-1.amazonaws.com",
-      "prod": "ec2-44-212-148-121.compute-1.amazonaws.com"
+      "url": "http://ec2-3-216-199-173.compute-1.amazonaws.com",
+      "description": "Development server"
+    },
+    {
+      "url": "http://ec2-35-169-79-235.compute-1.amazonaws.com",
+      "description": "Production server"
     }
   ],
   "paths": {
     "/upload-file": {
       "post": {
         "summary": "Upload file",
-        "description": "Upload file",
+        "description": "Sube un archivo a IPFS y lo pinea con Pinata.\n\n- Mas de **5 llamadas en un minuto** arrojara un error`429 Too Many Requests`",
         "operationId": "uploadFile",
         "requestBody": {
           "content": {
@@ -166,14 +170,291 @@
                 }
               }
             }
+          },
+          "429": {
+            "description": "Error: Too Many Requests",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "42"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Thu, 22 Dec 2022 12:06:16 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2a-UpTsLJ74nYuiLgNgEwlQMxGqwrE\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "example": "60"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "string",
+                  "example": "5"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "string",
+                  "example": "0"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "string",
+                  "example": "1671710810"
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error: Too Many Requests": {
+                    "value": "Too many requests, please try again later."
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
+    "/item/{hash}": {
+      "get": {
+        "summary": "Get Item",
+        "description": "Obtiene un item pineado anteriomente según el hash pasado por parametro de URL. El hash debe ser el hash del archivo subido anteriormente.",
+        "operationId": "getItem",
+        "responses": {
+          "200": {
+            "description": "Item found",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "510"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Fri, 02 Dec 2022 06:39:22 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"1fe-lOMBZ0Xel/VsusvhY5a1HfGZ/pk\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "item": {
+                      "type": "object",
+                      "properties": {
+                        "date_pinned": {
+                          "type": "string",
+                          "example": "2022-11-25T08:40:13.972Z"
+                        },
+                        "date_unpinned": {
+                          "nullable": true,
+                          "example": null
+                        },
+                        "id": {
+                          "type": "string",
+                          "example": "523346c4-2070-4234-a5af-6aaacf065d5f"
+                        },
+                        "ipfs_pin_hash": {
+                          "type": "string",
+                          "example": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "properties": {
+                            "keyvalues": {
+                              "type": "object",
+                              "properties": {
+                                "uploadedBy": {
+                                  "type": "string",
+                                  "example": "SMMP API"
+                                }
+                              }
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "mayuri.jpg"
+                            }
+                          }
+                        },
+                        "regions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "currentReplicationCount": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "desiredReplicationCount": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "regionId": {
+                                "type": "string",
+                                "example": "FRA1"
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ]
+                        },
+                        "size": {
+                          "type": "number",
+                          "example": 155841
+                        },
+                        "user_id": {
+                          "type": "string",
+                          "example": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        }
+                      }
+                    },
+                    "itemFound": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "Item found": {
+                    "value": {
+                      "item": {
+                        "date_pinned": "2022-11-25T08:40:13.972Z",
+                        "date_unpinned": null,
+                        "id": "523346c4-2070-4234-a5af-6aaacf065d5f",
+                        "ipfs_pin_hash": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy",
+                        "metadata": {
+                          "keyvalues": {
+                            "uploadedBy": "SMMP API"
+                          },
+                          "name": "mayuri.jpg"
+                        },
+                        "regions": [
+                          {
+                            "currentReplicationCount": 1,
+                            "desiredReplicationCount": 1,
+                            "regionId": "FRA1"
+                          },
+                          {
+                            "currentReplicationCount": 1,
+                            "desiredReplicationCount": 1,
+                            "regionId": "NYC1"
+                          }
+                        ],
+                        "size": 155841,
+                        "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                      },
+                      "itemFound": true,
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "hash",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+          }
+        }
+      ]
+    },
     "/search": {
       "post": {
         "summary": "Pinata Search",
-        "description": "Pinata Search",
+        "description": "Permite hacer busquedas en Pinata según filtros\n\n- Si no se envia nada se envian todos los items pineados\n- El fltro `hashContains` funciona como el endpoint de `GET item/`\n- Soporta paginacion enviando `pageOffset y pageLimit,` por deafult la longitud de paginacion es de 10.\n- Mas de **5 llamadas en un minuto** arrojara un error`429 Too Many Requests`",
         "operationId": "pinataSearch",
         "requestBody": {
           "content": {
@@ -202,7 +483,7 @@
         },
         "responses": {
           "200": {
-            "description": "Search",
+            "description": "No filters",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -219,19 +500,19 @@
               "Content-Length": {
                 "schema": {
                   "type": "string",
-                  "example": "511"
+                  "example": "5328"
                 }
               },
               "Date": {
                 "schema": {
                   "type": "string",
-                  "example": "Fri, 02 Dec 2022 06:44:42 GMT"
+                  "example": "Mon, 19 Dec 2022 01:46:14 GMT"
                 }
               },
               "ETag": {
                 "schema": {
                   "type": "string",
-                  "example": "W/\"1ff-6bT3FCuSjbE3GCXWGwiaafycUmk\""
+                  "example": "W/\"14d0-0ujs+wVsQNMYAUwVNymDgitwWWc\""
                 }
               },
               "Keep-Alive": {
@@ -259,7 +540,7 @@
                         "properties": {
                           "date_pinned": {
                             "type": "string",
-                            "example": "2022-11-25T08:40:13.972Z"
+                            "example": "2022-12-10T15:55:53.220Z"
                           },
                           "date_unpinned": {
                             "nullable": true,
@@ -267,11 +548,11 @@
                           },
                           "id": {
                             "type": "string",
-                            "example": "523346c4-2070-4234-a5af-6aaacf065d5f"
+                            "example": "90acb136-d617-439d-ae16-a432fd2423f8"
                           },
                           "ipfs_pin_hash": {
                             "type": "string",
-                            "example": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+                            "example": "QmQ8UiUqyH2NoS9zHQ1HPn4fBjsqAUor9BJS2MUsjVGkis"
                           },
                           "metadata": {
                             "type": "object",
@@ -279,6 +560,14 @@
                               "keyvalues": {
                                 "type": "object",
                                 "properties": {
+                                  "description": {
+                                    "type": "string",
+                                    "example": "Qatar Pet"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "example": "Qatar Pet"
+                                  },
                                   "uploadedBy": {
                                     "type": "string",
                                     "example": "SMMP API"
@@ -287,7 +576,7 @@
                               },
                               "name": {
                                 "type": "string",
-                                "example": "mayuri.jpg"
+                                "example": "giphy.gif"
                               }
                             }
                           },
@@ -325,7 +614,7 @@
                           },
                           "size": {
                             "type": "number",
-                            "example": 155841
+                            "example": 842469
                           },
                           "user_id": {
                             "type": "string",
@@ -335,15 +624,17 @@
                       },
                       "example": [
                         {
-                          "date_pinned": "2022-11-25T08:40:13.972Z",
+                          "date_pinned": "2022-12-10T15:55:53.220Z",
                           "date_unpinned": null,
-                          "id": "523346c4-2070-4234-a5af-6aaacf065d5f",
-                          "ipfs_pin_hash": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy",
+                          "id": "90acb136-d617-439d-ae16-a432fd2423f8",
+                          "ipfs_pin_hash": "QmQ8UiUqyH2NoS9zHQ1HPn4fBjsqAUor9BJS2MUsjVGkis",
                           "metadata": {
                             "keyvalues": {
+                              "description": "Qatar Pet",
+                              "name": "Qatar Pet",
                               "uploadedBy": "SMMP API"
                             },
-                            "name": "mayuri.jpg"
+                            "name": "giphy.gif"
                           },
                           "regions": [
                             {
@@ -357,14 +648,266 @@
                               "regionId": "NYC1"
                             }
                           ],
-                          "size": 155841,
+                          "size": 842469,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-10T15:53:47.054Z",
+                          "date_unpinned": null,
+                          "id": "a2c51fe4-23fb-4807-935d-1c6e1130d564",
+                          "ipfs_pin_hash": "QmeRpkCCqLnZU2JtLZnBpyoipf3DWdjYNQ1xe64Hn4cdfh",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Descripción...",
+                              "name": "Qatar 2022",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "logoqatar.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 89558,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-10T09:27:57.790Z",
+                          "date_unpinned": null,
+                          "id": "c1c025fc-9ace-41cf-aed0-f8ca81708bb3",
+                          "ipfs_pin_hash": "QmfLRuu2JMNxVTSFMQvAdMP3VdxFaUe8bj7gkdkqxcLG2S",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "from GitHub",
+                              "name": "Daft Punktocat",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "daftpunktocat-thomas.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 95078,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-04T16:54:50.706Z",
+                          "date_unpinned": null,
+                          "id": "d249ae9e-b566-4077-8ce6-4fc8162f43f8",
+                          "ipfs_pin_hash": "QmXXXk83q9EFzVyu9SkyBKB89U8z7GXGvLPivk7Ba2XUVY",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "asdasds",
+                              "name": "test 2",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "eddie-mendoza-pink.jpg"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 387005,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:41:35.956Z",
+                          "date_unpinned": null,
+                          "id": "9913bc74-bf2d-42db-b129-aebf0d08678f",
+                          "ipfs_pin_hash": "QmY5phc4xjuFNaNb62xN741LqnwBioAXBHxNnHJmootcKL",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "asdasd",
+                              "name": "New",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "dc7.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 202252,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:37:50.296Z",
+                          "date_unpinned": null,
+                          "id": "9fc9575f-84c6-4018-b4f7-74774a860f39",
+                          "ipfs_pin_hash": "QmQwFCoANtkcRox4ND3bqosS4EzCbqksVM1xj5GTRnfUfU",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Gold Pidgeon",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "pidgeon-species.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 280119,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:36:18.520Z",
+                          "date_unpinned": null,
+                          "id": "b8c5b106-5f8c-403b-bc8b-85b816bff050",
+                          "ipfs_pin_hash": "QmZvnSGWiwxDZ4F7nqqX5xkFuirzAnJGZP6Ji1cB295Tg2",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Lil dog",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Gutter Dog.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 49916,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:34:51.864Z",
+                          "date_unpinned": null,
+                          "id": "dba0402c-3999-4734-bbc5-c4088d536dc9",
+                          "ipfs_pin_hash": "QmZnYo2Xu2bav8mXQ2dx4pEvLXV6YCmJLutq6uiVc7KBnD",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Catverse",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Catverse.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 924723,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:33:21.554Z",
+                          "date_unpinned": null,
+                          "id": "9c95af72-edc8-4b88-a7ea-2770ace75662",
+                          "ipfs_pin_hash": "QmbHW7JUqBdnmCyewangoQLxtZKME2A4WwHW9yvBX3duzN",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Gold Cat",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Gold cat.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 175981,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:28:47.665Z",
+                          "date_unpinned": null,
+                          "id": "7822095a-b633-42d1-9822-511c4039deec",
+                          "ipfs_pin_hash": "QmUbL4Qk1ZmDwhumu5fdscjUkLZpZDP2r4oPGrcFiNFFiZ",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Perro cyborg generado por IA",
+                              "name": "Cydorg",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "cydorg.webp"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 192394,
                           "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
                         }
                       ]
                     },
                     "itemsFound": {
                       "type": "number",
-                      "example": 1
+                      "example": 10
                     },
                     "status": {
                       "type": "boolean",
@@ -373,19 +916,21 @@
                   }
                 },
                 "examples": {
-                  "Search": {
+                  "No filters": {
                     "value": {
                       "items": [
                         {
-                          "date_pinned": "2022-11-25T08:40:13.972Z",
+                          "date_pinned": "2022-12-10T15:55:53.220Z",
                           "date_unpinned": null,
-                          "id": "523346c4-2070-4234-a5af-6aaacf065d5f",
-                          "ipfs_pin_hash": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy",
+                          "id": "90acb136-d617-439d-ae16-a432fd2423f8",
+                          "ipfs_pin_hash": "QmQ8UiUqyH2NoS9zHQ1HPn4fBjsqAUor9BJS2MUsjVGkis",
                           "metadata": {
                             "keyvalues": {
+                              "description": "Qatar Pet",
+                              "name": "Qatar Pet",
                               "uploadedBy": "SMMP API"
                             },
-                            "name": "mayuri.jpg"
+                            "name": "giphy.gif"
                           },
                           "regions": [
                             {
@@ -399,12 +944,511 @@
                               "regionId": "NYC1"
                             }
                           ],
-                          "size": 155841,
+                          "size": 842469,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-10T15:53:47.054Z",
+                          "date_unpinned": null,
+                          "id": "a2c51fe4-23fb-4807-935d-1c6e1130d564",
+                          "ipfs_pin_hash": "QmeRpkCCqLnZU2JtLZnBpyoipf3DWdjYNQ1xe64Hn4cdfh",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Descripción...",
+                              "name": "Qatar 2022",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "logoqatar.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 89558,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-10T09:27:57.790Z",
+                          "date_unpinned": null,
+                          "id": "c1c025fc-9ace-41cf-aed0-f8ca81708bb3",
+                          "ipfs_pin_hash": "QmfLRuu2JMNxVTSFMQvAdMP3VdxFaUe8bj7gkdkqxcLG2S",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "from GitHub",
+                              "name": "Daft Punktocat",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "daftpunktocat-thomas.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 95078,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-04T16:54:50.706Z",
+                          "date_unpinned": null,
+                          "id": "d249ae9e-b566-4077-8ce6-4fc8162f43f8",
+                          "ipfs_pin_hash": "QmXXXk83q9EFzVyu9SkyBKB89U8z7GXGvLPivk7Ba2XUVY",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "asdasds",
+                              "name": "test 2",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "eddie-mendoza-pink.jpg"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 387005,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:41:35.956Z",
+                          "date_unpinned": null,
+                          "id": "9913bc74-bf2d-42db-b129-aebf0d08678f",
+                          "ipfs_pin_hash": "QmY5phc4xjuFNaNb62xN741LqnwBioAXBHxNnHJmootcKL",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "asdasd",
+                              "name": "New",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "dc7.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 202252,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:37:50.296Z",
+                          "date_unpinned": null,
+                          "id": "9fc9575f-84c6-4018-b4f7-74774a860f39",
+                          "ipfs_pin_hash": "QmQwFCoANtkcRox4ND3bqosS4EzCbqksVM1xj5GTRnfUfU",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Gold Pidgeon",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "pidgeon-species.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 280119,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:36:18.520Z",
+                          "date_unpinned": null,
+                          "id": "b8c5b106-5f8c-403b-bc8b-85b816bff050",
+                          "ipfs_pin_hash": "QmZvnSGWiwxDZ4F7nqqX5xkFuirzAnJGZP6Ji1cB295Tg2",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Lil dog",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Gutter Dog.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 49916,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:34:51.864Z",
+                          "date_unpinned": null,
+                          "id": "dba0402c-3999-4734-bbc5-c4088d536dc9",
+                          "ipfs_pin_hash": "QmZnYo2Xu2bav8mXQ2dx4pEvLXV6YCmJLutq6uiVc7KBnD",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Catverse",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Catverse.gif"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 924723,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:33:21.554Z",
+                          "date_unpinned": null,
+                          "id": "9c95af72-edc8-4b88-a7ea-2770ace75662",
+                          "ipfs_pin_hash": "QmbHW7JUqBdnmCyewangoQLxtZKME2A4WwHW9yvBX3duzN",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Generado de Gutter Cat Gang",
+                              "name": "Gold Cat",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "Gold cat.png"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 175981,
+                          "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
+                        },
+                        {
+                          "date_pinned": "2022-12-03T05:28:47.665Z",
+                          "date_unpinned": null,
+                          "id": "7822095a-b633-42d1-9822-511c4039deec",
+                          "ipfs_pin_hash": "QmUbL4Qk1ZmDwhumu5fdscjUkLZpZDP2r4oPGrcFiNFFiZ",
+                          "metadata": {
+                            "keyvalues": {
+                              "description": "Perro cyborg generado por IA",
+                              "name": "Cydorg",
+                              "uploadedBy": "SMMP API"
+                            },
+                            "name": "cydorg.webp"
+                          },
+                          "regions": [
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "FRA1"
+                            },
+                            {
+                              "currentReplicationCount": 1,
+                              "desiredReplicationCount": 1,
+                              "regionId": "NYC1"
+                            }
+                          ],
+                          "size": 192394,
                           "user_id": "c62b3ae7-7f61-4633-a8f8-59fc2224b358"
                         }
                       ],
-                      "itemsFound": 1,
+                      "itemsFound": 10,
                       "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Error: Too Many Requests",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "42"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Thu, 22 Dec 2022 12:07:43 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"2a-UpTsLJ74nYuiLgNgEwlQMxGqwrE\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "Retry-After": {
+                "schema": {
+                  "type": "string",
+                  "example": "60"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              },
+              "X-RateLimit-Limit": {
+                "schema": {
+                  "type": "string",
+                  "example": "5"
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "schema": {
+                  "type": "string",
+                  "example": "0"
+                }
+              },
+              "X-RateLimit-Reset": {
+                "schema": {
+                  "type": "string",
+                  "example": "1671710870"
+                }
+              }
+            },
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "Error: Too Many Requests": {
+                    "value": "Too many requests, please try again later."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/info": {
+      "get": {
+        "summary": "Info",
+        "description": "Info de la app",
+        "operationId": "info",
+        "responses": {
+          "200": {
+            "description": "Info",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "32"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Thu, 22 Dec 2022 12:05:00 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"20-UqOzvzkwjQG41ADy811YBaCZxbI\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "env": {
+                      "type": "string",
+                      "example": "dev"
+                    },
+                    "version": {
+                      "type": "string",
+                      "example": "v1.0.0"
+                    }
+                  }
+                },
+                "examples": {
+                  "Info": {
+                    "value": {
+                      "env": "dev",
+                      "version": "v1.0.0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Me",
+        "description": "Info del autor",
+        "operationId": "me",
+        "responses": {
+          "200": {
+            "description": "Me",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Connection": {
+                "schema": {
+                  "type": "string",
+                  "example": "keep-alive"
+                }
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "string",
+                  "example": "54"
+                }
+              },
+              "Date": {
+                "schema": {
+                  "type": "string",
+                  "example": "Thu, 22 Dec 2022 12:04:43 GMT"
+                }
+              },
+              "ETag": {
+                "schema": {
+                  "type": "string",
+                  "example": "W/\"36-rh6pNfwS7XrdWBDmaGH1ATTAkL4\""
+                }
+              },
+              "Keep-Alive": {
+                "schema": {
+                  "type": "string",
+                  "example": "timeout=5"
+                }
+              },
+              "X-Powered-By": {
+                "schema": {
+                  "type": "string",
+                  "example": "Express"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "age": {
+                      "type": "number",
+                      "example": 24
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Roger Ramos Paredes"
+                    },
+                    "student": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "Me": {
+                    "value": {
+                      "age": 24,
+                      "name": "Roger Ramos Paredes",
+                      "student": true
                     }
                   }
                 }

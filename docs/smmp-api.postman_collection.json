@@ -211,6 +211,22 @@
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "{{host}}/item/:hash",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"item",
+						":hash"
+					],
+					"variable": [
+						{
+							"key": "hash",
+							"value": "QmRZVAozYgkw3C8zyGAaBQGE81zBV5ekFP7BiTc2Tfw3Gy"
+						}
+					]
+				},
 				"description": "Obtiene un item pineado anteriomente según el hash pasado por parametro de URL. El hash debe ser el hash del archivo subido anteriormente."
 			},
 			"response": [

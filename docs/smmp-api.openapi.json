@@ -7,8 +7,12 @@
   },
   "servers": [
     {
-      "dev": "ec2-3-216-199-173.compute-1.amazonaws.com",
-      "prod": "ec2-35-169-79-235.compute-1.amazonaws.com"
+      "url": "http://ec2-3-216-199-173.compute-1.amazonaws.com",
+      "description": "Development server"
+    },
+    {
+      "url": "http://ec2-35-169-79-235.compute-1.amazonaws.com",
+      "description": "Production server"
     }
   ],
   "paths": {

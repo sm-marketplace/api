@@ -73,7 +73,7 @@ jobs:
           -e REDIS_TTL=${{ env.REDIS_TTL }} \
           ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Monitor with Prometheus & Grafana
+    - name: Up Prometheus & Grafana
       uses: appleboy/ssh-action@master
       with:
         key : ${{ env.SSH_PRIVATE_KEY }}
@@ -98,7 +98,15 @@ jobs:
             prom/prometheus; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \
-            grafana/grafana; \
+            grafana/grafana;
+
+    - name: Config Grafana
+      uses: appleboy/ssh-action@master
+      with:
+        key : ${{ env.SSH_PRIVATE_KEY }}
+        host: ${{ env.SERVER_HOST }}
+        username: ${{ env.SERVER_USER }}
+        script: |
           curl 'http://admin:admin@localhost:${{ env.GRAFANA_PORT }}/api/user/password' \
             -X 'PUT' \
             -H 'content-type: application/json' \
@@ -110,6 +118,4 @@ jobs:
             -H 'accept: application/json, text/plain, */*' \
             --data-raw '{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}' \
             --compressed
-
-          
 

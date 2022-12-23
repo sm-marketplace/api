@@ -12,6 +12,19 @@ env:
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.DEV_PINATA_API_KEY }}
   PINATA_SECRET_API_KEY: ${{ secrets.DEV_PINATA_SECRET_API_KEY }}
+  DOCKER_NET: local_net
+  REDIS_NAME: redis-db
+  REDIS_PORT: 6379
+  REDIS_TTL: 240000000
+  APP_EXT_PORT: 80
+  APP_PORT: 3000
+  PROMETHEUS_NAME: smmp-prometheus
+  PROMETHEUS_PORT: 3001 
+  GRAFANA_NAME: smmp-grafana
+  GRAFANA_PORT: 4000
+  GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
+  FORCE_RE_UP_MONITOR: 1
+
 
 on:
   push:
@@ -45,17 +58,55 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          sudo docker network create local_net ; \
-          sudo docker stop redis_db ; \
-          sudo docker run --network local_net -d -p 6379:6379 --rm --name redis_db redis:latest ; \
+          sudo docker network create ${{ env.DOCKER_NET }} ; \
+          sudo docker stop ${{ env.REDIS_NAME }} ; \
+          sudo docker run --network ${{ env.DOCKER_NET }} -d -p ${{ env.REDIS_PORT }}:${{ env.REDIS_PORT }} --rm --name ${{ env.REDIS_NAME }} redis:latest ; \
           sudo docker stop ${{ env.CONTAINER_NAME }} ; \
-          sudo docker run --network local_net --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p 80:3000 \
-          -e PORT=3000 \
+          sudo docker run --network ${{ env.DOCKER_NET }} --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p ${{ env.APP_EXT_PORT }}:${{ env.APP_PORT }} \
+          -e PORT=${{ env.APP_PORT }} \
           -e HOST=0.0.0.0 \
           -e STAGE=${{ env.STAGE }} \
           -e PINATA_API_KEY=${{ env.PINATA_API_KEY }} \
           -e PINATA_SECRET_API_KEY=${{ env.PINATA_SECRET_API_KEY }} \
-          -e REDIS_HOST=redis_db \
-          -e REDIS_PORT=6379 \
-          -e REDIS_TTL=240000000 \
+          -e REDIS_HOST=${{ env.REDIS_NAME }} \
+          -e REDIS_PORT=${{ env.REDIS_PORT }} \
+          -e REDIS_TTL=${{ env.REDIS_TTL }} \
           ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }}
+
+    - name: Monitor with Prometheus & Grafana
+      uses: appleboy/ssh-action@master
+      with:
+        key : ${{ env.SSH_PRIVATE_KEY }}
+        host: ${{ env.SERVER_HOST }}
+        username: ${{ env.SERVER_USER }}
+        # Run only if graphana or prometheous are not already up
+        script: |
+          ( \
+          docker container inspect ${{ env.PROMETHEUS_NAME }} && \
+          docker container inspect ${{ env.GRAFANA_NAME }} && \
+          ((${{ env.FORCE_RE_UP_MONITOR }} > 0)) \
+          ) || \
+          export APP_HOST=${{ env.CONTAINER_NAME }}; \
+          export APP_PORT=${{ env.APP_PORT }}; \
+          envsubst < ./ci/templates/prometheus.yml  > ./prometheus-data/prometheus.yml; \
+          docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
+            -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \ 
+            -v "$(pwd)/prometheus-data/prometheus.yml":/etc/prometheus/prometheus.yml \
+            prom/prometheus;
+          docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
+            -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \
+            grafana/grafana;
+          curl 'http://admin:admin@localhost:${{ env.GRAFANA_PORT }}/api/user/password' \
+            -X 'PUT' \
+            -H 'content-type: application/json' \
+            -H 'accept: application/json, text/plain, */*' \
+            --data-raw '{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}' \
+            --compressed;
+          curl 'http://admin:${{ env.GRAFANA_PASSWORD }}@localhost:${{ env.GRAFANA_PORT }}/api/datasources' \
+            -H 'Content-Type: application/json;charset=UTF-8' \
+            -H 'accept: application/json, text/plain, */*' \
+            --data-raw '{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}' \
+            --compressed
+          
+
+

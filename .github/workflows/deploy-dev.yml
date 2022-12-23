@@ -82,18 +82,18 @@ jobs:
         # Run only if graphana or prometheous are not already up
         script: |
           ( \
-          docker container inspect ${{ env.PROMETHEUS_NAME }} && \
-          docker container inspect ${{ env.GRAFANA_NAME }} && \
+          sudo docker container inspect ${{ env.PROMETHEUS_NAME }} && \
+          sudo docker container inspect ${{ env.GRAFANA_NAME }} && \
           ((${{ env.FORCE_RE_UP_MONITOR }} > 0)) \
           ) || \
           export APP_HOST=${{ env.CONTAINER_NAME }}; \
           export APP_PORT=${{ env.APP_PORT }}; \
           envsubst < ./ci/templates/prometheus.yml  > ./prometheus-data/prometheus.yml; \
-          docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
+          sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
             -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \ 
             -v "$(pwd)/prometheus-data/prometheus.yml":/etc/prometheus/prometheus.yml \
             prom/prometheus;
-          docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
+          sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \
             grafana/grafana;
           curl 'http://admin:admin@localhost:${{ env.GRAFANA_PORT }}/api/user/password' \

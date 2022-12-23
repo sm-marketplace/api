@@ -107,14 +107,14 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          curl 'localhost:${{ env.GRAFANA_PORT }}/api/user/password' -u "admin:admin" \
-            -X 'PUT' \
-            -H 'content-type: application/json' \
-            -H 'accept: application/json, text/plain, */*' \
-            --data-raw '{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}' \
+          curl localhost:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
+            -X "PUT" \
+            -H "content-type: application/json" \
+            -H "accept: application/json, text/plain, */*" \
+            --data-raw "{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}" \
             --compressed; \
-          curl 'localhost:${{ env.GRAFANA_PORT }}/api/datasources' -u "admin:${{ env.GRAFANA_PASSWORD }}" \
-            -H 'Content-Type: application/json;charset=UTF-8' \
-            -H 'accept: application/json, text/plain, */*' \
-            --data-raw '{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}' \
+          curl localhost:${{ env.GRAFANA_PORT }}/api/datasources -u "admin:${{ env.GRAFANA_PASSWORD }}" \
+            -H "Content-Type: application/json;charset=UTF-8" \
+            -H "accept: application/json, text/plain, */*" \
+            --data-raw "{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}" \
             --compressed

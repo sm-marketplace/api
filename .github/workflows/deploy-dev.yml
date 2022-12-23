@@ -86,6 +86,8 @@ jobs:
           sudo docker container inspect ${{ env.GRAFANA_NAME }} && \
           ((${{ env.FORCE_RE_UP_MONITOR }} > 0)) \
           ) || \
+          sudo docker stop ${{ env.PROMETHEUS_NAME }}; \
+          sudo docker stop ${{ env.GRAFANA_NAME }}; \
           sudo docker exec -t smmp-api /bin/sh -c "cat ci/templates/prometheus.yml" > prometheus-template.yml; \
           export APP_HOST=${{ env.CONTAINER_NAME }}; \
           export APP_PORT=${{ env.APP_PORT }}; \

@@ -95,16 +95,16 @@ jobs:
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
             -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \
             -v "$(pwd)/prometheus.yml":/etc/prometheus/prometheus.yml \
-            prom/prometheus;
+            prom/prometheus; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \
-            grafana/grafana;
+            grafana/grafana; \
           curl 'http://admin:admin@localhost:${{ env.GRAFANA_PORT }}/api/user/password' \
             -X 'PUT' \
             -H 'content-type: application/json' \
             -H 'accept: application/json, text/plain, */*' \
             --data-raw '{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}' \
-            --compressed;
+            --compressed; \
           curl 'http://admin:${{ env.GRAFANA_PASSWORD }}@localhost:${{ env.GRAFANA_PORT }}/api/datasources' \
             -H 'Content-Type: application/json;charset=UTF-8' \
             -H 'accept: application/json, text/plain, */*' \

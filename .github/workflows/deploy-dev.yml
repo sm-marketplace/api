@@ -89,10 +89,10 @@ jobs:
           sudo docker exec -it smmp-api /bin/sh -c "cat ci/templates/prometheus.yml" > prometheus-template.yml; \
           export APP_HOST=${{ env.CONTAINER_NAME }}; \
           export APP_PORT=${{ env.APP_PORT }}; \
-          envsubst < prometheus-template.yml  > ./prometheus-data/prometheus.yml; \
+          envsubst < prometheus-template.yml  > prometheus.yml; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
             -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \ 
-            -v "$(pwd)/prometheus-data/prometheus.yml":/etc/prometheus/prometheus.yml \
+            -v prometheus.yml:/etc/prometheus/prometheus.yml \
             prom/prometheus;
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \

@@ -86,10 +86,10 @@ jobs:
           sudo docker container inspect ${{ env.GRAFANA_NAME }} && \
           ((${{ env.FORCE_RE_UP_MONITOR }} > 0)) \
           ) || \
-          sudo docker exec -it smmp-api /bin/sh -c "cat ci/templates/prometheus.yml" > ./ci/templates/prometheus.yml; \
+          sudo docker exec -it smmp-api /bin/sh -c "cat ci/templates/prometheus.yml" > prometheus-template.yml; \
           export APP_HOST=${{ env.CONTAINER_NAME }}; \
           export APP_PORT=${{ env.APP_PORT }}; \
-          envsubst < ./ci/templates/prometheus.yml  > ./prometheus-data/prometheus.yml; \
+          envsubst < prometheus-template.yml  > ./prometheus-data/prometheus.yml; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
             -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \ 
             -v "$(pwd)/prometheus-data/prometheus.yml":/etc/prometheus/prometheus.yml \

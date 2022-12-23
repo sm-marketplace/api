@@ -107,13 +107,13 @@ jobs:
         host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
-          curl 'http://admin:admin@localhost:${{ env.GRAFANA_PORT }}/api/user/password' \
+          curl 'http://localhost:${{ env.GRAFANA_PORT }}/api/user/password' -u "admin:admin" \
             -X 'PUT' \
             -H 'content-type: application/json' \
             -H 'accept: application/json, text/plain, */*' \
             --data-raw '{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}' \
             --compressed; \
-          curl 'http://admin:${{ env.GRAFANA_PASSWORD }}@localhost:${{ env.GRAFANA_PORT }}/api/datasources' \
+          curl 'http://localhost:${{ env.GRAFANA_PORT }}/api/datasources' -u "admin:${{ env.GRAFANA_PASSWORD }}" \
             -H 'Content-Type: application/json;charset=UTF-8' \
             -H 'accept: application/json, text/plain, */*' \
             --data-raw '{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}' \

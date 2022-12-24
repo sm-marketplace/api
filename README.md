@@ -3,7 +3,7 @@
 ## Requeriments
 
 - Node 16
-- Project in [Pinata](https://www.pinata.cloud/)
+- Project in [Pinata](https://www.pinata.cloud/) 
 
 ## Docker Image
 Needs generate **`PINATA_API_KEY`** and **`PINATA_SECRET_API_KEY`** creating a 

@@ -21,7 +21,6 @@ export const handleMe = (req, res, next) => {
 export const handleInfo = (req, res, next) => {
   res.json({
     env: STAGE,
-    version: "v1.0.0",
   })
 
   next()

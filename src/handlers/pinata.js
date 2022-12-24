@@ -2,7 +2,7 @@ import { REDIS_TTL } from "../config.js";
 import { redisClient } from "../redis.js";
 import { getItem, getItems, pinataUpload, testPinataAuth } from "../services/pinata.js";
 
-export const handleHealthPinata = async (req, res) => {
+export const handleHealthPinata = async (req, res, next) => {
   let pinataRes = undefined;
   try {
     pinataRes = await testPinataAuth();
@@ -14,9 +14,11 @@ export const handleHealthPinata = async (req, res) => {
     env: process.env.STAGE,
     auth: pinataRes
   })
+
+  next()
 } 
 
-export const handleSearchPinata = async (req, res) => {
+export const handleSearchPinata = async (req, res, next) => {
   try {
 
     const filters = req.body['filters'];
@@ -28,16 +30,20 @@ export const handleSearchPinata = async (req, res) => {
       items,
     });
 
+    next()
+
   } catch (err) {
     console.error(err)
     res.status(500).send({
       success: false,
       message: "An error has occurred" 
     });
+
+    next()
   }
 }
 
-export const handleGetItemPinata = async (req, res) => {
+export const handleGetItemPinata = async (req, res, next) => {
   try {
 
     const hash = req.params['hash'];
@@ -54,16 +60,20 @@ export const handleGetItemPinata = async (req, res) => {
       item
     });
 
+    next()
+
   } catch (err) {
     console.error(err)
     res.status(500).send({
       success: false,
       message: "An error has occurred" 
     });
+
+    next()
   }
 }
 
-export const handlePostItemPinata = async (req, res) => {
+export const handlePostItemPinata = async (req, res, next) => {
   try {
   
     if (!req.files) {
@@ -96,6 +106,8 @@ export const handlePostItemPinata = async (req, res) => {
       pinata: pinataRes,
       metadata
     });
+
+    next()
   } catch (err) {
     console.error(err)
 
@@ -110,5 +122,7 @@ export const handlePostItemPinata = async (req, res) => {
       success: false,
       message: "An error has occurred" 
     });
+    
+    next()
   }
 }

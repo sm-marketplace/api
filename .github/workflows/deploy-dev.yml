@@ -7,7 +7,7 @@ env:
   DOCKER_IMAGE_TAG: dev
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  SERVER_HOST: ${{ secrets.DEV_SSH_HOST }}
+  SERVER_HOST: http://ec2-3-216-199-173.compute-1.amazonaws.com
   SERVER_USER: ${{ secrets.DEV_SSH_USER }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.DEV_PINATA_API_KEY }}
@@ -24,8 +24,6 @@ env:
   GRAFANA_PORT: 3000
   GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
   FORCE_RE_UP_MONITOR: 1
-  API_URL: http://ec2-3-216-199-173.compute-1.amazonaws.com
-
 
 on:
   push:
@@ -102,7 +100,7 @@ jobs:
             grafana/grafana;
 
     - name: Config Grafana
-      run: curl ${{ env.API_URL }}:3000/api/user -u "admin:admin"
+      run: curl ${{ env.SERVER_HOST }}:3000/api/user -u "admin:admin"
   # curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
   #     -X "PUT" \
   #     -H "content-type: application/json" \

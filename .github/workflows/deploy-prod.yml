@@ -23,7 +23,7 @@ env:
   GRAFANA_NAME: smmp-grafana
   GRAFANA_PORT: 3000
   GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
-  FORCE_RE_UP_MONITOR: 1
+  FORCE_RE_UP_MONITOR: 0
   MONITOR_HOST: ec2-52-201-89-189.compute-1.amazonaws.com
 
 on:

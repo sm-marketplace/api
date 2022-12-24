@@ -93,7 +93,7 @@ jobs:
           mkdir prometheus-data ; \
           sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/prometheus.yml > prometheus-data/prometheus-template.yml; \
           sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/alert.rules > prometheus-data/alert.rules; \
-          export APP_HOST=SERVER_HOST; \
+          export APP_HOST=${{ env.SERVER_HOST }}; \
           export APP_PORT=80; \
           envsubst < prometheus-data/prometheus-template.yml  > prometheus-data/prometheus.yml; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \

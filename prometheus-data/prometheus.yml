@@ -1,0 +1,11 @@
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['qweqweqwe:3003']
+        labels:
+          service: 'my-service'
+          group: 'production'
+rule_files:
+  - 'alert.rules'

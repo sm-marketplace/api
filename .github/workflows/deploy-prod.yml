@@ -24,7 +24,8 @@ env:
   GRAFANA_PORT: 3000
   GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
   FORCE_RE_UP_MONITOR: 1
-  
+  MONITOR_HOST: ec2-52-201-89-189.compute-1.amazonaws.com
+
 on:
   push:
     branches: [ "main" ]
@@ -54,11 +55,12 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         key : ${{ env.SSH_PRIVATE_KEY }}
-        host: ${{ env.SERVER_HOST }}
+        host: ${{ env.MONITOR_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
           sudo docker network create ${{ env.DOCKER_NET }} ; \
           sudo docker stop ${{ env.REDIS_NAME }} ; \
+          docker container prune -f; \
           sudo docker run --network ${{ env.DOCKER_NET }} -d -p ${{ env.REDIS_PORT }}:${{ env.REDIS_PORT }} --rm --name ${{ env.REDIS_NAME }} redis:latest ; \
           sudo docker stop ${{ env.CONTAINER_NAME }} ; \
           sudo docker run --network ${{ env.DOCKER_NET }} --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p ${{ env.APP_EXT_PORT }}:${{ env.APP_PORT }} \

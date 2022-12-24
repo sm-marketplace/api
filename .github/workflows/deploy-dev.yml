@@ -101,15 +101,15 @@ jobs:
             grafana/grafana;
 
     - name: Config Grafana
-      run: |
-        curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
-            -X "PUT" \
-            -H "content-type: application/json" \
-            -H "accept: application/json, text/plain, */*" \
-            --data-raw "{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}" \
-            --compressed; \
-        curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/datasources -u "admin:${{ env.GRAFANA_PASSWORD }}" \
-          -H "Content-Type: application/json;charset=UTF-8" \
-          -H "accept: application/json, text/plain, */*" \
-          --data-raw "{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}" \
-          --compressed
+      run: curl ec2-3-216-199-173.compute-1.amazonaws.com:3000/api/user -u "admin:admin"
+  # curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
+  #     -X "PUT" \
+  #     -H "content-type: application/json" \
+  #     -H "accept: application/json, text/plain, */*" \
+  #     --data-raw "{"oldPassword":"admin","newPassword":"${{ env.GRAFANA_PASSWORD }}","confirmNew":"${{ env.GRAFANA_PASSWORD }}"}" \
+  #     --compressed; \
+  # curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/datasources -u "admin:${{ env.GRAFANA_PASSWORD }}" \
+  #   -H "Content-Type: application/json;charset=UTF-8" \
+  #   -H "accept: application/json, text/plain, */*" \
+  #   --data-raw "{"name":"DS_PROMETHEUS","type":"prometheus","url":"http://${{ env.PROMETHEUS_NAME }}:${{ env.PROMETHEUS_PORT }}","access":"proxy","jsonData":{"keepCookies":[]},"secureJsonFields":{}}" \
+  #   --compressed

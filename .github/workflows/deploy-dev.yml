@@ -92,7 +92,6 @@ jobs:
           sudo docker container prune -f; \
           mkdir -p prometheus-data ; \
           sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/prometheus.yml > prometheus-data/prometheus-template.yml; \
-          sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/alert.rules > prometheus-data/alert.rules; \
           export APP_HOST=${{ env.SERVER_HOST }}; \
           export APP_PORT=80; \
           envsubst < prometheus-data/prometheus-template.yml  > prometheus-data/prometheus.yml; \
@@ -104,6 +103,7 @@ jobs:
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \
             grafana/grafana;
 
+    # sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/alert.rules > prometheus-data/alert.rules; \
     # - name: Config Grafana
     #   uses: wei/curl@v1
     #   with:

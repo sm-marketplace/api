@@ -5,7 +5,7 @@
 - Node 16
 - Project in [Pinata](https://www.pinata.cloud/) 
 
-## Docker Image
+## Docker Image 
 Needs generate **`PINATA_API_KEY`** and **`PINATA_SECRET_API_KEY`** creating a 
 [Pinata](https://www.pinata.cloud/) project and then should set as enviroment variables
 

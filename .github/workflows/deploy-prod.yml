@@ -55,12 +55,11 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         key : ${{ env.SSH_PRIVATE_KEY }}
-        host: ${{ env.MONITOR_HOST }}
+        host: ${{ env.SERVER_HOST }}
         username: ${{ env.SERVER_USER }}
         script: |
           sudo docker network create ${{ env.DOCKER_NET }} ; \
           sudo docker stop ${{ env.REDIS_NAME }} ; \
-          docker container prune -f; \
           sudo docker run --network ${{ env.DOCKER_NET }} -d -p ${{ env.REDIS_PORT }}:${{ env.REDIS_PORT }} --rm --name ${{ env.REDIS_NAME }} redis:latest ; \
           sudo docker stop ${{ env.CONTAINER_NAME }} ; \
           sudo docker run --network ${{ env.DOCKER_NET }} --pull always --rm --name ${{ env.CONTAINER_NAME }} -d -p ${{ env.APP_EXT_PORT }}:${{ env.APP_PORT }} \
@@ -78,7 +77,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         key : ${{ env.SSH_PRIVATE_KEY }}
-        host: ${{ env.SERVER_HOST }}
+        host: ${{ env.MONITOR_HOST }}
         username: ${{ env.SERVER_USER }}
         # Run only if graphana or prometheous are not already up
         script: |
@@ -87,15 +86,19 @@ jobs:
           sudo docker container inspect ${{ env.GRAFANA_NAME }} && \
           ((${{ env.FORCE_RE_UP_MONITOR }} > 0)) \
           ) || \
+          sudo docker network create ${{ env.DOCKER_NET }} ; \
           sudo docker stop ${{ env.PROMETHEUS_NAME }}; \
           sudo docker stop ${{ env.GRAFANA_NAME }}; \
-          sudo docker exec -t ${{ env.CONTAINER_NAME }} /bin/sh -c "cat ci/templates/prometheus.yml" > prometheus-template.yml; \
-          export APP_HOST=${{ env.CONTAINER_NAME }}; \
-          export APP_PORT=${{ env.APP_PORT }}; \
-          envsubst < prometheus-template.yml  > prometheus.yml; \
+          docker container prune -f; \
+          mkdir prometheus-data ;\
+          sudo docker exec -t ${{ env.CONTAINER_NAME }} /bin/sh -c "cat ci/templates/prometheus.yml" > prometheus-data/prometheus-template.yml; \
+          sudo docker exec -t ${{ env.CONTAINER_NAME }} /bin/sh -c "cat ci/templates/alert.rules" > prometheus-data/alert.rules; \
+          export APP_HOST=SERVER_HOST; \
+          export APP_PORT=80; \
+          envsubst < prometheus-data/prometheus-template.yml  > prometheus-data/prometheus.yml; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.PROMETHEUS_NAME }} --rm -d \
             -p ${{ env.PROMETHEUS_PORT }}:${{ env.PROMETHEUS_PORT }} \
-            -v "$(pwd)/prometheus.yml":/etc/prometheus/prometheus.yml \
+            -v "$(pwd)/prometheus-data":/etc/prometheus \
             prom/prometheus; \
           sudo docker run --network ${{ env.DOCKER_NET }} --name ${{ env.GRAFANA_NAME }} --rm -d \
             -p ${{ env.GRAFANA_PORT }}:${{ env.GRAFANA_PORT }} \

@@ -89,8 +89,8 @@ jobs:
           sudo docker network create ${{ env.DOCKER_NET }} ; \
           sudo docker stop ${{ env.PROMETHEUS_NAME }}; \
           sudo docker stop ${{ env.GRAFANA_NAME }}; \
-          docker container prune -f; \
-          mkdir prometheus-data ; \
+          sudo docker container prune -f; \
+          mkdir -p prometheus-data ; \
           sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/prometheus.yml > prometheus-data/prometheus-template.yml; \
           sudo docker run --pull always --rm --entrypoint cat ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_IMAGE_TAG }} ci/templates/alert.rules > prometheus-data/alert.rules; \
           export APP_HOST=${{ env.SERVER_HOST }}; \

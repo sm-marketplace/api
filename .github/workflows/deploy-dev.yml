@@ -7,7 +7,7 @@ env:
   DOCKER_IMAGE_TAG: dev
   DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  SERVER_HOST: http://ec2-3-216-199-173.compute-1.amazonaws.com
+  SERVER_HOST: ec2-3-216-199-173.compute-1.amazonaws.com
   SERVER_USER: ${{ secrets.DEV_SSH_USER }}
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
   PINATA_API_KEY: ${{ secrets.DEV_PINATA_API_KEY }}

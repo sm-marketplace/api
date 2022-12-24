@@ -22,7 +22,6 @@ export const handleInfo = (req, res, next) => {
   res.json({
     env: STAGE,
     version: "v1.0.0",
-    cambioDePrueba: "Expo final 24-12-2022"
   })
 
   next()

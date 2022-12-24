@@ -24,6 +24,7 @@ env:
   GRAFANA_PORT: 3000
   GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
   FORCE_RE_UP_MONITOR: 1
+  API_URL: http://ec2-3-216-199-173.compute-1.amazonaws.com
 
 
 on:
@@ -101,7 +102,7 @@ jobs:
             grafana/grafana;
 
     - name: Config Grafana
-      run: curl ec2-3-216-199-173.compute-1.amazonaws.com:3000/api/user -u "admin:admin"
+      run: curl ${{ env.API_URL }}:3000/api/user -u "admin:admin"
   # curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
   #     -X "PUT" \
   #     -H "content-type: application/json" \

@@ -100,7 +100,8 @@ jobs:
             grafana/grafana;
 
     - name: Config Grafana
-      run: curl ${{ env.SERVER_HOST }}:3000/api/user -u "admin:admin"
+      # run: curl ${{ env.SERVER_HOST }}:3000/api/user -u "admin:admin"
+      run: curl ec2-3-216-199-173.compute-1.amazonaws.com:3000/api/user -u "admin:admin"
   # curl ${{ env.SERVER_HOST }}:${{ env.GRAFANA_PORT }}/api/user/password -u "admin:admin" \
   #     -X "PUT" \
   #     -H "content-type: application/json" \

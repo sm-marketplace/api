@@ -21,6 +21,7 @@ export const handleMe = (req, res, next) => {
 export const handleInfo = (req, res, next) => {
   res.json({
     env: STAGE,
+    cambioPrueba: "cambio para la expo 24-12-2022"
   })
 
   next()
